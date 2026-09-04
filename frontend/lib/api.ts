@@ -2,7 +2,10 @@
  * Reusable REST API Client for FastAPI Cryptocurrency Backend.
  */
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_BASE_URL = (
+  process.env.NEXT_PUBLIC_API_URL ||
+  "https://crypto-currency-prediction-using-lstm.onrender.com"
+).replace(/\/$/, "");
 
 export interface CryptoAsset {
   id?: string;
@@ -284,10 +287,14 @@ export async function triggerModelTraining(ticker: string, force: boolean = fals
  * Request LSTM next daily closing price prediction.
  */
 export async function getPrediction(ticker: string): Promise<CryptoPredictionResponse> {
-  return fetchAPI<CryptoPredictionResponse>("/api/predictions", {
-    method: "POST",
-    body: JSON.stringify({ ticker }),
-  });
+  try {
+    return await fetchAPI<CryptoPredictionResponse>(`/api/predictions/${encodeURIComponent(ticker)}`);
+  } catch {
+    return fetchAPI<CryptoPredictionResponse>("/api/predictions", {
+      method: "POST",
+      body: JSON.stringify({ ticker }),
+    });
+  }
 }
 
 /**

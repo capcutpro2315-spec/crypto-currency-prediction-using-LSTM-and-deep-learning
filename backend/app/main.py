@@ -23,7 +23,7 @@ raw_origins = (
     os.getenv("FRONTEND_ORIGIN")
     or os.getenv("FRONTEND_URL")
     or os.getenv("ALLOWED_ORIGINS")
-    or "http://localhost:3000,http://127.0.0.1:3000"
+    or "http://localhost:3000,http://127.0.0.1:3000,https://crypto-price-prediction.vercel.app"
 )
 allowed_origins = [origin.strip() for origin in raw_origins.split(",") if origin.strip()]
 
@@ -40,8 +40,9 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
