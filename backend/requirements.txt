@@ -1,0 +1,22 @@
+# Core Data Pipeline Dependencies
+pandas>=2.0.0
+numpy>=1.26.0
+scikit-learn>=1.4.0
+yfinance>=0.2.40
+requests>=2.31.0
+httpx>=0.27.0
+
+# FastAPI Web Server Dependencies
+fastapi>=0.110.0
+uvicorn[standard]>=0.30.0
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+python-dotenv>=1.0.0
+
+# Deep Learning Engine
+tensorflow>=2.16.0
+
+# Testing & Utilities
+pytest>=8.0.0
+
+

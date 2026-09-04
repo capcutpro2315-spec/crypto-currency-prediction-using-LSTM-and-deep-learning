@@ -1,0 +1,74 @@
+{
+  "cryptocurrency": "XRP",
+  "ticker": "XRP-USD",
+  "quote_currency": "USD",
+  "feature_names": [
+    "Close"
+  ],
+  "target_name": "Close",
+  "sequence_length": 60,
+  "training_date_range": {
+    "start": "2023-10-17",
+    "end": "2026-01-10"
+  },
+  "test_date_range": {
+    "start": "2026-03-12",
+    "end": "2026-08-18"
+  },
+  "model_architecture": {
+    "type": "LSTM",
+    "layers": [
+      {
+        "name": "LSTM_1",
+        "units": 64,
+        "return_sequences": true
+      },
+      {
+        "name": "Dropout_1",
+        "rate": 0.2
+      },
+      {
+        "name": "LSTM_2",
+        "units": 32,
+        "return_sequences": false
+      },
+      {
+        "name": "Dropout_2",
+        "rate": 0.2
+      },
+      {
+        "name": "Dense_1",
+        "units": 16,
+        "activation": "relu"
+      },
+      {
+        "name": "Output",
+        "units": 1,
+        "activation": "linear"
+      }
+    ],
+    "optimizer": "Adam",
+    "loss_function": "MeanSquaredError"
+  },
+  "training_config": {
+    "epochs_requested": 40,
+    "epochs_completed": 14,
+    "batch_size": 32,
+    "patience": 10,
+    "train_ratio": 0.8
+  },
+  "loss_summary": {
+    "final_train_loss_scaled_mse": 0.005043309181928635,
+    "final_val_loss_scaled_mse": 0.0015925545012578368
+  },
+  "test_metrics_original_scale": {
+    "mae": 0.0462798435240984,
+    "mse": 0.003671314064336051,
+    "rmse": 0.0605913695532297,
+    "r2": 0.850559363114979
+  },
+  "latest_historical_close": 0.9965999722480774,
+  "saved_model_file": "XRP-USD_lstm.keras",
+  "saved_metadata_file": "XRP-USD_lstm_metadata.json",
+  "saved_actual_vs_pred_file": "XRP-USD_actual_vs_predicted.csv"
+}

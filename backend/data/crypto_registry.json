@@ -1,0 +1,62 @@
+{
+  "provider": "yfinance",
+  "quote_currency": "USD",
+  "assets": [
+    {
+      "name": "Bitcoin",
+      "symbol": "BTC",
+      "yahoo_ticker": "BTC-USD",
+      "provider_id": "BTC-USD",
+      "active": true
+    },
+    {
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "yahoo_ticker": "ETH-USD",
+      "provider_id": "ETH-USD",
+      "active": true
+    },
+    {
+      "name": "Solana",
+      "symbol": "SOL",
+      "yahoo_ticker": "SOL-USD",
+      "provider_id": "SOL-USD",
+      "active": true
+    },
+    {
+      "name": "XRP",
+      "symbol": "XRP",
+      "yahoo_ticker": "XRP-USD",
+      "provider_id": "XRP-USD",
+      "active": true
+    },
+    {
+      "name": "Dogecoin",
+      "symbol": "DOGE",
+      "yahoo_ticker": "DOGE-USD",
+      "provider_id": "DOGE-USD",
+      "active": true
+    },
+    {
+      "name": "Cardano",
+      "symbol": "ADA",
+      "yahoo_ticker": "ADA-USD",
+      "provider_id": "ADA-USD",
+      "active": true
+    },
+    {
+      "name": "Polkadot",
+      "symbol": "DOT",
+      "yahoo_ticker": "DOT-USD",
+      "provider_id": "DOT-USD",
+      "active": true
+    },
+    {
+      "name": "Avalanche",
+      "symbol": "AVAX",
+      "yahoo_ticker": "AVAX-USD",
+      "provider_id": "AVAX-USD",
+      "active": true
+    }
+  ]
+}

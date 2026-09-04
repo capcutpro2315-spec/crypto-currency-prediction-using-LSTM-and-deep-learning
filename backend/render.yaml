@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: crypto-price-prediction-backend
+    env: python
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: ENV
+        value: production
+      - key: FRONTEND_ORIGIN
+        value: https://crypto-price-prediction.vercel.app,http://localhost:3000

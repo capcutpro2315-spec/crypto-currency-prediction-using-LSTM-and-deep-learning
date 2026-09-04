@@ -1,0 +1,84 @@
+{
+  "crypto_id": "SHIB-USD",
+  "symbol": "SHIB",
+  "market_ticker": "SHIB-USD",
+  "cryptocurrency": "SHIB",
+  "ticker": "SHIB-USD",
+  "quote_currency": "USD",
+  "available_history_days": 1097,
+  "lookback_days": 60,
+  "training_samples": 817,
+  "test_samples": 160,
+  "training_date": "2026-01-10",
+  "data_start": "2023-10-17",
+  "data_end": "2026-08-18",
+  "feature_names": [
+    "Close"
+  ],
+  "target_name": "Close",
+  "sequence_length": 60,
+  "training_date_range": {
+    "start": "2023-10-17",
+    "end": "2026-01-10"
+  },
+  "test_date_range": {
+    "start": "2026-03-12",
+    "end": "2026-08-18"
+  },
+  "model_architecture": {
+    "type": "LSTM",
+    "layers": [
+      {
+        "name": "LSTM_1",
+        "units": 64,
+        "return_sequences": true
+      },
+      {
+        "name": "Dropout_1",
+        "rate": 0.2
+      },
+      {
+        "name": "LSTM_2",
+        "units": 32,
+        "return_sequences": false
+      },
+      {
+        "name": "Dropout_2",
+        "rate": 0.2
+      },
+      {
+        "name": "Dense_1",
+        "units": 16,
+        "activation": "relu"
+      },
+      {
+        "name": "Output",
+        "units": 1,
+        "activation": "linear"
+      }
+    ],
+    "optimizer": "Adam",
+    "loss_function": "MeanSquaredError"
+  },
+  "training_config": {
+    "epochs_requested": 40,
+    "epochs_completed": 12,
+    "batch_size": 32,
+    "patience": 10,
+    "train_ratio": 0.8
+  },
+  "loss_summary": {
+    "final_train_loss_scaled_mse": 0.007402933668345213,
+    "final_val_loss_scaled_mse": 0.008133424445986748
+  },
+  "test_metrics_original_scale": {
+    "mae": 2.034609946122146e-06,
+    "mse": 4.917789044682383e-12,
+    "rmse": 2.2176088574593993e-06,
+    "r2": -6.148402289412314
+  },
+  "latest_historical_close": 4.4299999899521936e-06,
+  "saved_model_file": "SHIB-USD_lstm_60d.keras",
+  "saved_metadata_file": "SHIB-USD_lstm_60d_metadata.json",
+  "saved_actual_vs_pred_file": "SHIB-USD_actual_vs_predicted.csv"
+}
