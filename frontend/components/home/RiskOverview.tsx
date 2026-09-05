@@ -22,8 +22,7 @@ export function RiskOverview({
 }: RiskOverviewProps) {
   const change24h = liveData?.change_24h ?? marketSummary?.price_change_24h_percent;
 
-  // Determine risk level
-  let riskLevel: "LOW" | "MEDIUM" | "HIGH" | "Risk information unavailable" = "Risk information unavailable";
+  let riskLevel: "LOW" | "MEDIUM" | "HIGH" | "UNAVAILABLE" = "UNAVAILABLE";
 
   if (decisionData?.risk_label) {
     const label = decisionData.risk_label.toUpperCase();
@@ -39,94 +38,66 @@ export function RiskOverview({
 
   const riskFactors = decisionData?.risk_factors || [];
 
-  const getRiskStyle = (lvl: string) => {
-    switch (lvl) {
-      case "LOW":
-        return {
-          bg: "bg-emerald-500/15 border-emerald-500/40 text-emerald-400",
-          barWidth: "w-1/3 bg-emerald-500",
-        };
-      case "MEDIUM":
-        return {
-          bg: "bg-amber-500/15 border-amber-500/40 text-amber-400",
-          barWidth: "w-2/3 bg-amber-500",
-        };
-      case "HIGH":
-        return {
-          bg: "bg-rose-500/15 border-rose-500/40 text-rose-400",
-          barWidth: "w-full bg-rose-500",
-        };
-      default:
-        return {
-          bg: "bg-slate-800 border-slate-700 text-slate-400",
-          barWidth: "w-0 bg-slate-700",
-        };
-    }
-  };
-
-  const riskStyle = getRiskStyle(riskLevel);
-
   return (
-    <Card variant="hover" className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center space-x-2">
-            <ShieldAlert className="w-5 h-5 text-amber-400" />
-            <span>What Could Go Wrong?</span>
-          </h2>
-          <p className="text-xs text-slate-400">Risk level and key potential risk factors for {ticker}</p>
-        </div>
-
-        <span
-          className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-extrabold border ${riskStyle.bg}`}
-        >
-          {riskLevel === "Risk information unavailable" ? "UNAVAILABLE" : `${riskLevel} RISK`}
-        </span>
+    <section className="space-y-4">
+      <div>
+        <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">What Could Go Wrong?</h2>
+        <p className="text-xs text-slate-400">Risk evaluation and key asset vulnerabilities</p>
       </div>
 
-      {loading ? (
-        <div className="h-16 bg-slate-900 animate-pulse rounded-xl" />
-      ) : (
-        <div className="space-y-4">
-          {/* Visual Risk Gauge */}
-          <div className="space-y-1">
-            <div className="flex justify-between text-[11px] font-mono text-slate-400">
-              <span>Low Risk</span>
-              <span>Medium Risk</span>
-              <span>High Risk</span>
-            </div>
-            <div className="h-2.5 w-full bg-slate-950 rounded-full overflow-hidden border border-slate-800">
-              <div className={`h-full rounded-full transition-all duration-500 ${riskStyle.barWidth}`} />
-            </div>
-          </div>
+      <div className="bg-[#0d1322] border border-slate-800/80 rounded-xl p-6 space-y-6">
+        {loading ? (
+          <div className="h-24 bg-slate-900 animate-pulse rounded-xl" />
+        ) : (
+          <div className="space-y-6">
+            {/* Risk Level Header */}
+            <div className="flex items-center justify-between border-b border-slate-800/80 pb-4">
+              <div>
+                <span className="text-xs font-mono font-medium text-slate-400 uppercase tracking-wider block">
+                  Assessed Risk Level
+                </span>
+                <span className="text-xs text-slate-400">Calculated from historical volatility & model penalties</span>
+              </div>
 
-          {/* Dynamic Risk Factors List */}
-          {riskFactors.length > 0 ? (
-            <div className="space-y-2 pt-2">
-              <span className="text-xs font-bold text-slate-300 uppercase tracking-wider block">
-                Identified Risk Factors:
-              </span>
-              <div className="space-y-2">
-                {riskFactors.map((factor, idx) => (
-                  <div
-                    key={idx}
-                    className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 text-xs text-slate-300 flex items-start space-x-2.5"
-                  >
-                    <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                    <span>{factor}</span>
-                  </div>
-                ))}
+              <div className="text-right">
+                <span
+                  className={`px-3 py-1 rounded text-xs font-mono font-bold tracking-wider ${
+                    riskLevel === "LOW"
+                      ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                      : riskLevel === "HIGH"
+                      ? "bg-rose-500/10 text-rose-400 border border-rose-500/20"
+                      : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                  }`}
+                >
+                  {riskLevel} RISK
+                </span>
               </div>
             </div>
-          ) : (
-            <div className="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800 text-xs text-slate-400 flex items-center space-x-2">
-              <Info className="w-4 h-4 text-slate-500 shrink-0" />
-              <span>Standard cryptocurrency price volatility applies. High price swings can occur.</span>
+
+            {/* Identified Risk Factors */}
+            <div className="space-y-3">
+              <span className="text-xs font-mono font-semibold text-slate-300 uppercase tracking-wider block">
+                Key Vulnerability Factors:
+              </span>
+              {riskFactors.length > 0 ? (
+                <ul className="space-y-2 text-xs text-slate-300">
+                  {riskFactors.map((factor, idx) => (
+                    <li key={idx} className="flex items-start space-x-2.5 bg-[#090d16] p-3 rounded-lg border border-slate-800/60">
+                      <span className="text-amber-400 font-bold shrink-0">•</span>
+                      <span className="leading-relaxed">{factor}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-xs text-slate-400 bg-[#090d16] p-3 rounded-lg border border-slate-800/60">
+                  Standard cryptocurrency price volatility applies. Unexpected market events or sudden liquidity drops can cause rapid price movements.
+                </p>
+              )}
             </div>
-          )}
-        </div>
-      )}
-    </Card>
+          </div>
+        )}
+      </div>
+    </section>
   );
 }
 

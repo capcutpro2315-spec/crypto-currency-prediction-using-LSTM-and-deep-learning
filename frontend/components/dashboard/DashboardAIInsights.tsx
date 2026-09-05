@@ -89,88 +89,81 @@ export function DashboardAIInsights({ catalog, loading, onSelectCrypto }: Dashbo
   };
 
   return (
-    <Card variant="gradient" className="space-y-6 border-emerald-500/30">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-        <div>
-          <h2 className="text-xl font-bold text-white flex items-center space-x-2">
-            <Cpu className="w-5 h-5 text-emerald-400" />
-            <span>AI Insights</span>
-          </h2>
-          <p className="text-xs text-slate-400">
-            Algorithmic predictions, confidence scores, and signal evaluations across ready AI models
-          </p>
-        </div>
-
-        <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-xl border border-emerald-500/30 w-fit">
-          Deep Learning Pipeline Active
-        </span>
+    <section className="space-y-4">
+      <div>
+        <h2 className="text-xl font-bold text-white tracking-tight">AI Insights Summary</h2>
+        <p className="text-xs text-slate-400">
+          Algorithmic forecasts, model confidence, and signal evaluations across ready AI models
+        </p>
       </div>
 
-      {loading || fetching ? (
-        <div className="space-y-2 py-2">
-          {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-12 bg-slate-800 animate-pulse rounded-xl" />
-          ))}
-        </div>
-      ) : rows.length === 0 ? (
-        <div className="p-4 text-center text-xs text-slate-500">AI analysis unavailable.</div>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-slate-300">
-            <thead className="bg-slate-950/80 text-slate-400 uppercase font-mono text-[10px] tracking-wider border-b border-slate-800">
-              <tr>
-                <th className="py-3 px-4">Cryptocurrency</th>
-                <th className="py-3 px-4">Current Price</th>
-                <th className="py-3 px-4">Expected Movement</th>
-                <th className="py-3 px-4">Confidence</th>
-                <th className="py-3 px-4">Risk</th>
-                <th className="py-3 px-4 text-right">AI Signal</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800/60 font-mono">
-              {rows.map((row) => {
-                const isPos = row.expectedChange !== null ? row.expectedChange >= 0 : null;
+      <div className="bg-[#0d1322] border border-slate-800/80 rounded-xl p-5 space-y-4 shadow-sm">
+        {loading || fetching ? (
+          <div className="space-y-2 py-2">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="h-10 bg-slate-900/60 animate-pulse rounded" />
+            ))}
+          </div>
+        ) : rows.length === 0 ? (
+          <div className="p-4 text-center text-xs text-slate-500">AI analysis unavailable.</div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs text-slate-300">
+              <thead className="bg-[#090d16] text-slate-400 uppercase font-mono text-[10px] tracking-wider border-b border-slate-800/80">
+                <tr>
+                  <th className="py-3 px-4 font-medium">Cryptocurrency</th>
+                  <th className="py-3 px-4 font-medium">Current Price</th>
+                  <th className="py-3 px-4 font-medium">Expected Movement</th>
+                  <th className="py-3 px-4 font-medium">Confidence</th>
+                  <th className="py-3 px-4 font-medium">Risk</th>
+                  <th className="py-3 px-4 text-right font-medium">AI Signal</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/50 font-mono">
+                {rows.map((row) => {
+                  const isPos = row.expectedChange !== null ? row.expectedChange >= 0 : null;
 
-                return (
-                  <tr key={row.ticker} className="hover:bg-slate-800/40 transition-colors">
-                    <td className="py-3.5 px-4 font-sans font-bold text-white flex items-center space-x-2">
-                      <span>{row.name}</span>
-                      <span className="text-xs text-slate-500 font-mono">({row.symbol})</span>
-                    </td>
-                    <td className="py-3.5 px-4 text-slate-200">{formatPrice(row.currentPrice)}</td>
-                    <td className="py-3.5 px-4">
-                      {row.expectedChange !== null ? (
-                        <span className={isPos ? "text-emerald-400 font-bold" : "text-rose-400 font-bold"}>
-                          {isPos ? "+" : ""}
-                          {row.expectedChange.toFixed(2)}%
-                        </span>
-                      ) : (
-                        <span className="text-slate-500">Unavailable</span>
-                      )}
-                    </td>
-                    <td className="py-3.5 px-4 text-blue-400 font-bold">
-                      {row.confidenceScore !== null ? `${Math.round(row.confidenceScore)} / 100` : "75 / 100"}
-                    </td>
-                    <td className="py-3.5 px-4">
-                      <span className="text-slate-300 uppercase">{row.riskLabel}</span>
-                    </td>
-                    <td className="py-3.5 px-4 text-right font-sans">
-                      <Link
-                        href={`/prediction/${encodeURIComponent(row.ticker)}`}
-                        onClick={() => onSelectCrypto(row.ticker)}
-                        className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-lg bg-blue-600/20 text-blue-400 border border-blue-500/40 font-bold hover:bg-blue-600 hover:text-white transition-all cursor-pointer"
-                      >
-                        <span>{row.decision}</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </Link>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </Card>
+                  return (
+                    <tr key={row.ticker} className="hover:bg-slate-800/40 transition-colors">
+                      <td className="py-3 px-4 font-sans font-semibold text-white flex items-center space-x-2">
+                        <span>{row.name}</span>
+                        <span className="text-xs text-slate-400 font-mono">({row.symbol})</span>
+                      </td>
+                      <td className="py-3 px-4 text-slate-200">{formatPrice(row.currentPrice)}</td>
+                      <td className="py-3 px-4">
+                        {row.expectedChange !== null ? (
+                          <span className={isPos ? "text-emerald-400 font-bold" : "text-rose-400 font-bold"}>
+                            {isPos ? "+" : ""}
+                            {row.expectedChange.toFixed(2)}%
+                          </span>
+                        ) : (
+                          <span className="text-slate-500">Unavailable</span>
+                        )}
+                      </td>
+                      <td className="py-3 px-4 text-blue-400 font-bold">
+                        {row.confidenceScore !== null ? `${Math.round(row.confidenceScore)} / 100` : "75 / 100"}
+                      </td>
+                      <td className="py-3 px-4">
+                        <span className="text-slate-300 uppercase">{row.riskLabel}</span>
+                      </td>
+                      <td className="py-3 px-4 text-right font-sans">
+                        <Link
+                          href={`/prediction/${encodeURIComponent(row.ticker)}`}
+                          onClick={() => onSelectCrypto(row.ticker)}
+                          className="inline-flex items-center space-x-1 px-3 py-1 rounded bg-blue-500/10 text-blue-400 border border-blue-500/30 font-semibold text-xs hover:bg-blue-600 hover:text-white transition-all cursor-pointer"
+                        >
+                          <span>{row.decision}</span>
+                          <ArrowRight className="w-3 h-3" />
+                        </Link>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </section>
   );
 }

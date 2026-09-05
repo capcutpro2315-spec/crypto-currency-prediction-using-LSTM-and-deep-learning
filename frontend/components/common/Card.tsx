@@ -10,15 +10,15 @@ interface CardProps {
 }
 
 export function Card({ children, className, variant = "default" }: CardProps) {
-  const baseStyles = "rounded-2xl p-6 transition-all duration-200";
+  const baseStyles = "rounded-xl p-6 transition-all duration-200";
 
   const variants = {
-    default: "bg-slate-900/70 border border-slate-800 backdrop-blur-md",
+    default: "bg-[#0d1322]/90 border border-slate-800/80 backdrop-blur-sm",
     hover:
-      "bg-slate-900/70 border border-slate-800/80 hover:border-slate-700 hover:shadow-xl hover:shadow-blue-950/20 backdrop-blur-md",
-    bordered: "bg-slate-950/80 border border-slate-700/60 backdrop-blur-sm",
+      "bg-[#0d1322]/90 border border-slate-800/80 hover:border-slate-700/90 hover:bg-[#10182b] transition-all backdrop-blur-sm",
+    bordered: "bg-[#090d16] border border-slate-800/90",
     gradient:
-      "bg-gradient-to-br from-slate-900/90 via-slate-900/60 to-slate-950/90 border border-slate-800/80 backdrop-blur-xl shadow-2xl",
+      "bg-gradient-to-b from-[#0f172a] to-[#0b101d] border border-slate-800/80 backdrop-blur-md",
   };
 
   return <div className={clsx(baseStyles, variants[variant], className)}>{children}</div>;

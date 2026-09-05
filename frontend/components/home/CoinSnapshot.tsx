@@ -78,75 +78,81 @@ export function CoinSnapshot({
   }
 
   return (
-    <Card variant="gradient" className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-4">
-        <div className="flex items-center space-x-3">
-          <div className="p-2.5 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-400">
-            <Compass className="w-5 h-5" />
-          </div>
-          <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-white">See the Bigger Picture</h2>
-            <p className="text-xs text-slate-400">Market snapshot & indicator synthesis for {cryptoName}</p>
-          </div>
-        </div>
-
-        <div className="flex items-center space-x-3 text-right">
-          <div>
-            <div className="text-lg font-extrabold text-white font-mono">{priceText}</div>
-            {change24h != null ? (
-              <span className={`text-xs font-mono font-bold flex items-center justify-end ${isPos ? "text-emerald-400" : "text-rose-400"}`}>
-                {isPos ? <TrendingUp className="w-3.5 h-3.5 mr-0.5" /> : <TrendingDown className="w-3.5 h-3.5 mr-0.5" />}
-                {isPos ? "+" : ""}{change24h.toFixed(2)}% (24h)
-              </span>
-            ) : (
-              <span className="text-xs text-slate-500 font-mono">24h Change unavailable</span>
-            )}
-          </div>
-        </div>
+    <section className="space-y-6">
+      <div>
+        <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">See the Bigger Picture</h2>
+        <p className="text-xs text-slate-400">Current snapshot and market synthesis for selected asset</p>
       </div>
 
-      {loading ? (
-        <div className="space-y-3 py-2">
-          <div className="h-16 bg-slate-900 rounded-xl animate-pulse" />
-          <div className="h-6 w-3/4 bg-slate-900 rounded-lg animate-pulse" />
-        </div>
-      ) : (
-        <>
-          {/* 4 Simple Indicator Cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="bg-slate-950/70 border border-slate-800/80 rounded-xl p-3.5 space-y-1">
-              <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">Market Mood</span>
-              <div className={`text-base font-bold ${marketMood === "Positive" ? "text-emerald-400" : marketMood === "Negative" ? "text-rose-400" : "text-blue-400"}`}>
-                {marketMood}
-              </div>
-            </div>
-
-            <div className="bg-slate-950/70 border border-slate-800/80 rounded-xl p-3.5 space-y-1">
-              <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">Price Trend</span>
-              <div className={`text-base font-bold ${priceTrend === "Upward" ? "text-emerald-400" : priceTrend === "Downward" ? "text-rose-400" : "text-slate-300"}`}>
-                {priceTrend}
-              </div>
-            </div>
-
-            <div className="bg-slate-950/70 border border-slate-800/80 rounded-xl p-3.5 space-y-1">
-              <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">Risk</span>
-              <div className={`text-base font-bold ${riskLevel === "Low" ? "text-emerald-400" : riskLevel === "High" ? "text-rose-400" : "text-amber-400"}`}>
-                {riskLevel}
-              </div>
-            </div>
-
-            <div className="bg-slate-950/70 border border-slate-800/80 rounded-xl p-3.5 space-y-1">
-              <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">Trading Activity</span>
-              <div className="text-base font-bold text-slate-200">{tradingActivity}</div>
-            </div>
+      <div className="bg-[#0d1322] border border-slate-800/80 rounded-xl p-6 sm:p-8 space-y-6">
+        {loading ? (
+          <div className="space-y-4 py-4">
+            <div className="h-10 w-48 bg-slate-900 animate-pulse rounded" />
+            <div className="h-14 w-64 bg-slate-900 animate-pulse rounded" />
           </div>
+        ) : (
+          <>
+            {/* Visual Focus: Dominant Asset & Price Header */}
+            <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4 border-b border-slate-800/80 pb-6">
+              <div>
+                <div className="flex items-center space-x-2">
+                  <h3 className="text-2xl sm:text-3xl font-extrabold text-white">{cryptoName}</h3>
+                  <span className="text-sm font-mono font-bold text-slate-400 uppercase">({symbol})</span>
+                </div>
+                <p className="text-xs text-slate-400 mt-1">Live spot reference price</p>
+              </div>
 
-          {/* Dynamic Summary Statement */}
-          <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 text-sm text-slate-300 leading-relaxed font-sans">
-            &quot;{summaryText}&quot;
-          </div>
-        </>
-      )}
-    </Card>
+              <div className="sm:text-right">
+                <div className="text-3xl sm:text-4xl font-black text-white font-mono tracking-tight">
+                  {priceText}
+                </div>
+                {change24h != null ? (
+                  <div className={`text-sm font-mono font-bold flex items-center sm:justify-end mt-1 ${isPos ? "text-emerald-400" : "text-rose-400"}`}>
+                    {isPos ? <TrendingUp className="w-4 h-4 mr-1" /> : <TrendingDown className="w-4 h-4 mr-1" />}
+                    {isPos ? "+" : ""}{change24h.toFixed(2)}% (24h)
+                  </div>
+                ) : (
+                  <span className="text-xs text-slate-500 font-mono">24h Change unavailable</span>
+                )}
+              </div>
+            </div>
+
+            {/* Secondary Indicators */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div className="space-y-1">
+                <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">Market Mood</span>
+                <div className={`text-sm font-bold ${marketMood === "Positive" ? "text-emerald-400" : marketMood === "Negative" ? "text-rose-400" : "text-blue-400"}`}>
+                  {marketMood}
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">Price Trend</span>
+                <div className={`text-sm font-bold ${priceTrend === "Upward" ? "text-emerald-400" : priceTrend === "Downward" ? "text-rose-400" : "text-slate-300"}`}>
+                  {priceTrend}
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">Risk Level</span>
+                <div className={`text-sm font-bold ${riskLevel === "Low" ? "text-emerald-400" : riskLevel === "High" ? "text-rose-400" : "text-amber-400"}`}>
+                  {riskLevel}
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">Trading Activity</span>
+                <div className="text-sm font-bold text-slate-200">{tradingActivity}</div>
+              </div>
+            </div>
+
+            {/* Dynamic Summary Statement */}
+            <div className="pt-2 text-xs sm:text-sm text-slate-400 border-t border-slate-800/60 leading-relaxed font-sans">
+              {summaryText}
+            </div>
+          </>
+        )}
+      </div>
+    </section>
   );
 }

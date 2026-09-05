@@ -33,141 +33,87 @@ export function ScenarioCards({ ticker, prediction, loading }: ScenarioCardsProp
   return (
     <section className="space-y-4">
       <div>
-        <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center space-x-2">
-          <Layers className="w-5 h-5 text-indigo-400" />
-          <span>What Could Happen?</span>
-        </h2>
+        <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">What Could Happen?</h2>
         <p className="text-xs text-slate-400">
-          Possible future price scenarios based on our analysis
+          Possible price outcomes within our statistical error bound
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* CARD 1: BEST CASE */}
-        <Card variant="hover" className="space-y-3 relative overflow-hidden border-emerald-500/30">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-extrabold text-emerald-400 uppercase tracking-wider flex items-center space-x-1">
-              <TrendingUp className="w-4 h-4" />
-              <span>BEST CASE</span>
-            </span>
-            <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-              Optimistic Bound
-            </span>
+      <div className="bg-[#0d1322] border border-slate-800/80 rounded-xl p-6 sm:p-8 space-y-8">
+        {loading ? (
+          <div className="h-32 bg-slate-900 animate-pulse rounded-xl" />
+        ) : !isAvailable ? (
+          <div className="text-sm font-medium text-slate-400 py-4 text-center">
+            Scenario range analysis unavailable for this asset.
           </div>
-
-          {loading ? (
-            <div className="h-14 bg-slate-800 animate-pulse rounded-lg" />
-          ) : scenariosAvailable && bestCase != null ? (
-            <div className="py-1 space-y-1">
-              <div className="text-2xl font-extrabold text-emerald-400 font-mono">
-                {formatPrice(bestCase)}
+        ) : (
+          <div className="space-y-6">
+            {/* Unified Vertical Continuum Spectrum */}
+            <div className="relative pl-6 sm:pl-10 space-y-8 border-l-2 border-slate-800">
+              {/* 1. BEST CASE */}
+              <div className="relative flex items-center justify-between gap-4">
+                <div className="absolute -left-[31px] sm:-left-[47px] w-4 h-4 rounded-full bg-slate-900 border-2 border-emerald-500" />
+                <div>
+                  <span className="text-xs font-mono font-semibold text-emerald-400 uppercase tracking-wider block">
+                    Best Case (Upper Bound)
+                  </span>
+                  <span className="text-xs text-slate-400">Favorable volatility outcome</span>
+                </div>
+                <div className="text-lg font-mono font-bold text-emerald-400">
+                  {scenariosAvailable && bestCase != null ? formatPrice(bestCase) : "N/A"}
+                </div>
               </div>
-              <p className="text-xs text-slate-300">
-                Favorable upper bound based on test-set RMSE volatility band.
-              </p>
-            </div>
-          ) : (
-            <div className="py-2 space-y-1">
-              <div className="text-sm font-bold text-slate-400">
-                Scenario analysis unavailable
-              </div>
-              <p className="text-xs text-slate-400">
-                A favorable scenario requires valid evaluation metrics.
-              </p>
-            </div>
-          )}
 
-          <div className="text-[11px] text-slate-500 pt-2 border-t border-slate-800">
-            {scenariosAvailable && bestCase != null ? "Statistical upper bound (+1.25 RMSE)" : "Requires model evaluation metrics."}
+              {/* 2. EXPECTED FORECAST (PRIMARY EMPHASIS ●) */}
+              <div className="relative flex items-center justify-between gap-4 py-3 px-4 bg-[#090d16] rounded-xl border border-blue-500/30">
+                <div className="absolute -left-[39px] sm:-left-[55px] w-6 h-6 rounded-full bg-blue-600 border-4 border-[#0d1322] shadow-sm flex items-center justify-center">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white"></span>
+                </div>
+                <div>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-xs font-mono font-bold text-blue-400 uppercase tracking-wider">
+                      Expected Central Forecast
+                    </span>
+                    <span className="text-[10px] font-mono text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">
+                      Baseline
+                    </span>
+                  </div>
+                  <span className="text-xs text-slate-300">Central neural forecast</span>
+                </div>
+                <div className="text-right">
+                  <div className="text-2xl font-mono font-extrabold text-white">
+                    {formatPrice(expectedPrice)}
+                  </div>
+                  {expectedChange != null && (
+                    <div className={`text-xs font-mono font-bold ${isPos ? "text-emerald-400" : "text-rose-400"}`}>
+                      {isPos ? "+" : ""}{expectedChange.toFixed(2)}%
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* 3. WORST CASE */}
+              <div className="relative flex items-center justify-between gap-4">
+                <div className="absolute -left-[31px] sm:-left-[47px] w-4 h-4 rounded-full bg-slate-900 border-2 border-rose-500" />
+                <div>
+                  <span className="text-xs font-mono font-semibold text-rose-400 uppercase tracking-wider block">
+                    Worst Case (Lower Bound)
+                  </span>
+                  <span className="text-xs text-slate-400">Conservative downside outcome</span>
+                </div>
+                <div className="text-lg font-mono font-bold text-rose-400">
+                  {scenariosAvailable && worstCase != null ? formatPrice(worstCase) : "N/A"}
+                </div>
+              </div>
+            </div>
+
+            <div className="text-[11px] text-slate-500 pt-3 border-t border-slate-800/60 flex items-center justify-between">
+              <span>Upper/lower bounds calculated using test-set error volatility band (±1.25 RMSE).</span>
+              <span className="italic">Scenarios represent possibilities, not guarantees.</span>
+            </div>
           </div>
-        </Card>
-
-        {/* CARD 2: EXPECTED CASE */}
-        <Card variant="gradient" className="space-y-3 relative overflow-hidden border-blue-500/40 shadow-xl">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-extrabold text-blue-400 uppercase tracking-wider flex items-center space-x-1">
-              <ShieldCheck className="w-4 h-4" />
-              <span>EXPECTED</span>
-            </span>
-            <span className="text-[10px] font-mono text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">
-              Central Forecast
-            </span>
-          </div>
-
-          {loading ? (
-            <div className="h-14 bg-slate-800 animate-pulse rounded-lg" />
-          ) : isAvailable ? (
-            <div className="py-1 space-y-1">
-              <div className="text-2xl font-extrabold text-white font-mono">
-                {formatPrice(expectedPrice)}
-              </div>
-              <div
-                className={`text-xs font-bold font-mono ${
-                  isPos ? "text-emerald-400" : "text-rose-400"
-                }`}
-              >
-                Expected Change: {isPos ? "+" : ""}
-                {expectedChange?.toFixed(2)}%
-              </div>
-            </div>
-          ) : (
-            <div className="text-sm font-bold text-slate-400 py-2">
-              Model prediction unavailable
-            </div>
-          )}
-
-          <p className="text-xs text-slate-300">
-            The central forecast from our current analysis.
-          </p>
-
-          <div className="text-[11px] text-slate-500 pt-2 border-t border-slate-800">
-            Baseline expected outcome.
-          </div>
-        </Card>
-
-        {/* CARD 3: WORST CASE */}
-        <Card variant="hover" className="space-y-3 relative overflow-hidden border-rose-500/30">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-extrabold text-rose-400 uppercase tracking-wider flex items-center space-x-1">
-              <TrendingDown className="w-4 h-4" />
-              <span>WORST CASE</span>
-            </span>
-            <span className="text-[10px] font-mono text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded border border-rose-500/20">
-              Downside Bound
-            </span>
-          </div>
-
-          {loading ? (
-            <div className="h-14 bg-slate-800 animate-pulse rounded-lg" />
-          ) : scenariosAvailable && worstCase != null ? (
-            <div className="py-1 space-y-1">
-              <div className="text-2xl font-extrabold text-rose-400 font-mono">
-                {formatPrice(worstCase)}
-              </div>
-              <p className="text-xs text-slate-300">
-                Conservative lower bound based on test-set RMSE volatility band.
-              </p>
-            </div>
-          ) : (
-            <div className="py-2 space-y-1">
-              <div className="text-sm font-bold text-slate-400">
-                Scenario analysis unavailable
-              </div>
-              <p className="text-xs text-slate-400">
-                A downside scenario requires valid evaluation metrics.
-              </p>
-            </div>
-          )}
-
-          <div className="text-[11px] text-slate-500 pt-2 border-t border-slate-800">
-            {scenariosAvailable && worstCase != null ? "Statistical lower bound (-1.25 RMSE)" : "Requires model evaluation metrics."}
-          </div>
-        </Card>
+        )}
       </div>
-
-      <p className="text-xs text-slate-400 text-center italic">
-        These are possible scenarios, not guaranteed outcomes.
-      </p>
     </section>
   );
 }

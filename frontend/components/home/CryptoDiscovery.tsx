@@ -131,72 +131,102 @@ export function CryptoDiscovery() {
         <Search className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
       </div>
 
-      {/* Discovery Grid Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Discovery List / Watchlist */}
+      <div className="bg-[#0d1322] border border-slate-800/80 rounded-xl overflow-hidden shadow-sm">
         {loading ? (
-          [1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-            <div key={i} className="h-36 bg-slate-900 rounded-2xl border border-slate-800 animate-pulse p-4 space-y-3" />
-          ))
+          <div className="p-8 space-y-4">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="h-10 bg-slate-900/60 rounded animate-pulse" />
+            ))}
+          </div>
         ) : filteredCoins.length > 0 ? (
-          filteredCoins.map((coin) => {
-            const priceText = coin.livePrice != null ? `$${coin.livePrice.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : "Unavailable";
-            const changeVal = coin.change24h;
-            const isPos = changeVal != null && changeVal >= 0;
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead>
+                <tr className="border-b border-slate-800/80 bg-slate-950/60 text-slate-400 font-mono">
+                  <th className="py-3 px-4 font-medium">Asset</th>
+                  <th className="py-3 px-4 font-medium">Symbol</th>
+                  <th className="py-3 px-4 font-medium text-right">Price</th>
+                  <th className="py-3 px-4 font-medium text-right">24h Change</th>
+                  <th className="py-3 px-4 font-medium text-center">AI Model</th>
+                  <th className="py-3 px-4 font-medium text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/50 text-slate-200">
+                {filteredCoins.map((coin) => {
+                  const priceText = coin.livePrice != null ? `$${coin.livePrice.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : "Unavailable";
+                  const changeVal = coin.change24h;
+                  const isPos = changeVal != null && changeVal >= 0;
 
-            return (
-              <Card key={coin.ticker || coin.symbol} variant="hover" className="flex flex-col justify-between space-y-4">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center space-x-3">
-                    {coin.image ? (
-                      <img src={coin.image} alt={coin.name} className="w-8 h-8 rounded-full object-cover shrink-0" />
-                    ) : (
-                      <div className="w-8 h-8 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center font-bold text-xs shrink-0">
-                        {coin.symbol.slice(0, 3).toUpperCase()}
-                      </div>
-                    )}
-                    <div>
-                      <h3 className="font-bold text-sm text-white group-hover:text-blue-400 transition-colors">
-                        {coin.name}
-                      </h3>
-                      <span className="text-xs font-mono text-slate-500 uppercase">({coin.symbol})</span>
-                    </div>
-                  </div>
-
-                  {coin.market_cap_rank && (
-                    <span className="text-[10px] font-mono text-slate-500 bg-slate-950 px-2 py-0.5 rounded-md border border-slate-800">
-                      #{coin.market_cap_rank}
-                    </span>
-                  )}
-                </div>
-
-                <div className="space-y-1">
-                  <div className="text-lg font-extrabold text-white font-mono">{priceText}</div>
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-500">24h Change:</span>
-                    {changeVal != null ? (
-                      <span className={`font-mono font-bold flex items-center ${isPos ? "text-emerald-400" : "text-rose-400"}`}>
-                        {isPos ? <TrendingUp className="w-3 h-3 mr-0.5" /> : <TrendingDown className="w-3 h-3 mr-0.5" />}
-                        {isPos ? "+" : ""}{changeVal.toFixed(2)}%
-                      </span>
-                    ) : (
-                      <span className="text-slate-500">N/A</span>
-                    )}
-                  </div>
-                </div>
-
-                <Link
-                  href={`/analysis/${encodeURIComponent(coin.ticker)}`}
-                  onClick={() => setSelectedTicker(coin.ticker)}
-                  className="w-full py-2 bg-slate-950 hover:bg-blue-600/15 border border-slate-800 hover:border-blue-500/40 text-blue-400 hover:text-blue-300 text-xs font-semibold rounded-xl text-center transition-all flex items-center justify-center space-x-1.5"
-                >
-                  <span>View Coin</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </Card>
-            );
-          })
+                  return (
+                    <tr
+                      key={coin.ticker || coin.symbol}
+                      className="hover:bg-slate-800/40 transition-colors group cursor-pointer"
+                      onClick={() => {
+                        setSelectedTicker(coin.ticker);
+                      }}
+                    >
+                      <td className="py-3 px-4">
+                        <div className="flex items-center space-x-3">
+                          {coin.image ? (
+                            <img src={coin.image} alt={coin.name} className="w-6 h-6 rounded-full object-cover shrink-0" />
+                          ) : (
+                            <div className="w-6 h-6 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center font-bold text-[10px] shrink-0">
+                              {coin.symbol.slice(0, 3).toUpperCase()}
+                            </div>
+                          )}
+                          <span className="font-semibold text-slate-100 group-hover:text-blue-400 transition-colors">
+                            {coin.name}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="py-3 px-4 font-mono text-slate-400">
+                        {coin.symbol.toUpperCase()}
+                      </td>
+                      <td className="py-3 px-4 font-mono font-semibold text-slate-100 text-right">
+                        {priceText}
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        {changeVal != null ? (
+                          <span className={`font-mono font-bold inline-flex items-center ${isPos ? "text-emerald-400" : "text-rose-400"}`}>
+                            {isPos ? "+" : ""}{changeVal.toFixed(2)}%
+                          </span>
+                        ) : (
+                          <span className="text-slate-500 font-mono">N/A</span>
+                        )}
+                      </td>
+                      <td className="py-3 px-4 text-center">
+                        {coin.has_trained_model || coin.model_available ? (
+                          <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                            Ready
+                          </span>
+                        ) : (
+                          <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-400">
+                            Standard
+                          </span>
+                        )}
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        <Link
+                          href={`/analysis/${encodeURIComponent(coin.ticker)}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedTicker(coin.ticker);
+                          }}
+                          className="inline-flex items-center space-x-1 px-3 py-1 bg-slate-800 hover:bg-blue-600/20 text-slate-300 hover:text-blue-400 text-xs font-medium rounded border border-slate-700 hover:border-blue-500/40 transition-colors"
+                        >
+                          <span>Analyze</span>
+                          <ArrowRight className="w-3 h-3" />
+                        </Link>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         ) : (
-          <div className="col-span-full p-8 text-center bg-slate-900/50 rounded-2xl border border-slate-800 text-slate-400 text-xs">
+          <div className="p-8 text-center text-slate-400 text-xs">
             No cryptocurrencies found matching your query or filter criteria.
           </div>
         )}

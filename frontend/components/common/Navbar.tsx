@@ -7,11 +7,11 @@ import { Cpu, BarChart2, TrendingUp, Info, HelpCircle, Menu, X, Search, ShieldCh
 import { useCrypto } from "@/lib/CryptoContext";
 
 const NAV_ITEMS = [
-  { name: "Home", path: "/", icon: Cpu },
-  { name: "Markets", path: "/markets", icon: BarChart2 },
-  { name: "AI Analysis", path: "/prediction", icon: TrendingUp },
-  { name: "How It Works", path: "/how-it-works", icon: HelpCircle },
-  { name: "About", path: "/about", icon: Info },
+  { name: "Home", path: "/" },
+  { name: "Markets", path: "/markets" },
+  { name: "Predictions", path: "/prediction" },
+  { name: "Dashboard", path: "/dashboard" },
+  { name: "How It Works", path: "/how-it-works" },
 ];
 
 export function Navbar() {
@@ -32,32 +32,27 @@ export function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-[#0b0f19]/90 backdrop-blur-md border-b border-slate-800">
+    <header className="sticky top-0 z-50 bg-[#090d16]/85 backdrop-blur-lg border-b border-slate-800/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 gap-4">
+        <div className="flex items-center justify-between h-16 gap-6">
           {/* Logo & Brand Identity */}
-          <Link href="/" className="flex items-center space-x-3 shrink-0 group">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-500 to-emerald-500 p-0.5 shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
-              <div className="w-full h-full bg-[#0b0f19] rounded-[10px] flex items-center justify-center">
-                <TrendingUp className="w-4 h-4 text-blue-400" />
-              </div>
+          <Link href="/" className="flex items-center space-x-2.5 shrink-0 group">
+            <div className="w-8 h-8 rounded-lg bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400 group-hover:border-blue-500/50 transition-colors">
+              <TrendingUp className="w-4 h-4 text-blue-400" />
             </div>
-            <div>
-              <div className="flex items-center space-x-2">
-                <span className="text-lg font-extrabold bg-gradient-to-r from-blue-400 via-indigo-300 to-emerald-400 bg-clip-text text-transparent">
-                  CryptoPredict AI
-                </span>
-              </div>
-              <span className="block text-[10px] text-slate-400 font-medium tracking-tight -mt-0.5">
-                AI Powered Cryptocurrency Analysis
+            <div className="flex flex-col">
+              <span className="text-base font-bold text-slate-100 tracking-tight group-hover:text-white transition-colors">
+                CryptoPredict
+              </span>
+              <span className="text-[10px] text-slate-400 font-medium tracking-tight -mt-0.5">
+                Market Intelligence Platform
               </span>
             </div>
           </Link>
 
-          {/* Desktop Global Navigation Links */}
+          {/* Desktop Navigation Links */}
           <nav className="hidden lg:flex items-center space-x-1">
             {NAV_ITEMS.map((item) => {
-              const Icon = item.icon;
               const isActive =
                 item.path === "/"
                   ? pathname === "/"
@@ -66,14 +61,13 @@ export function Navbar() {
                 <Link
                   key={item.path}
                   href={item.path}
-                  className={`flex items-center space-x-2 px-3.5 py-2 rounded-xl text-sm font-medium transition-all ${
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors relative ${
                     isActive
-                      ? "bg-blue-600/15 text-blue-400 border border-blue-500/30 shadow-sm"
-                      : "text-slate-300 hover:text-white hover:bg-slate-800/60"
+                      ? "text-blue-400 bg-blue-500/10 border border-blue-500/20"
+                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50"
                   }`}
                 >
-                  <Icon className="w-4 h-4" />
-                  <span>{item.name}</span>
+                  {item.name}
                 </Link>
               );
             })}
@@ -134,7 +128,6 @@ export function Navbar() {
 
           <div className="space-y-1">
             {NAV_ITEMS.map((item) => {
-              const Icon = item.icon;
               const isActive =
                 item.path === "/"
                   ? pathname === "/"
@@ -144,13 +137,12 @@ export function Navbar() {
                   key={item.path}
                   href={item.path}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                  className={`block px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
                     isActive
-                      ? "bg-blue-600/20 text-blue-400 border border-blue-500/30"
+                      ? "bg-blue-500/10 text-blue-400 border border-blue-500/20"
                       : "text-slate-300 hover:bg-slate-800/60"
                   }`}
                 >
-                  <Icon className="w-4 h-4 text-blue-400" />
                   <span>{item.name}</span>
                 </Link>
               );

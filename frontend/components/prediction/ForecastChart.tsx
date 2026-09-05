@@ -11,18 +11,15 @@ interface ForecastChartProps {
 
 export function ForecastChart({ ticker }: ForecastChartProps) {
   return (
-    <Card variant="gradient" className="space-y-4">
+    <section className="space-y-4">
       <div>
-        <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center space-x-2">
-          <LineChart className="w-5 h-5 text-blue-400" />
-          <span>PRICE FORECAST</span>
-        </h2>
+        <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">Price Forecast</h2>
         <p className="text-xs text-slate-400 mt-1">
-          See how closely the AI forecast follows the coin's real historical prices.
+          See how closely the AI forecast follows the coin&apos;s real historical price movement.
         </p>
       </div>
 
       <PredictionChart ticker={ticker} />
-    </Card>
+    </section>
   );
 }
