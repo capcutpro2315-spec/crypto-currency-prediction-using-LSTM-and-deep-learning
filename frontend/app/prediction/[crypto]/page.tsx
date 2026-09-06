@@ -30,6 +30,8 @@ import { ForecastChart } from "@/components/prediction/ForecastChart";
 import { DataUsedSection } from "@/components/prediction/DataUsedSection";
 import { SimplifiedModelPerformance } from "@/components/prediction/SimplifiedModelPerformance";
 import { CollapsibleTechnicalDetails } from "@/components/prediction/CollapsibleTechnicalDetails";
+import { WhatsHappeningNowSection } from "@/components/prediction/WhatsHappeningNowSection";
+import { WhereCouldItGoSection } from "@/components/prediction/WhereCouldItGoSection";
 import { PredictionDisclaimer } from "@/components/prediction/PredictionDisclaimer";
 import { AlertCircle, RefreshCw } from "lucide-react";
 import { Card } from "@/components/common/Card";
@@ -141,11 +143,22 @@ export default function PredictionCryptoPage() {
         loading={analyzing}
       />
 
+      {/* 2. WHAT'S HAPPENING RIGHT NOW? */}
+      <WhatsHappeningNowSection
+        cryptoName={cryptoName}
+        symbol={symbol}
+        ticker={ticker}
+        liveData={liveData}
+        marketSummary={marketSummary}
+        decisionData={decisionData}
+        loading={pageLoading}
+      />
+
       {/* STATE 1: ANALYZING LOADING STEP FLOW */}
       {analyzing ? (
         <AnalyzingState cryptoName={cryptoName} />
       ) : isInsufficientHistory ? (
-        /* SECTION 19: INSUFFICIENT HISTORY STATE */
+        /* INSUFFICIENT HISTORY STATE */
         <Card variant="gradient" className="space-y-4 border-amber-500/30 text-center py-8">
           <AlertCircle className="w-8 h-8 text-amber-400 mx-auto" />
           <h2 className="text-xl font-bold text-white">Insufficient Historical Data</h2>
@@ -154,7 +167,7 @@ export default function PredictionCryptoPage() {
           </p>
         </Card>
       ) : isModelNotReady && hasRun ? (
-        /* SECTION 20: MODEL NOT TRAINED STATE */
+        /* MODEL NOT TRAINED STATE */
         <Card variant="gradient" className="space-y-4 border-blue-500/30 text-center py-8">
           <AlertCircle className="w-8 h-8 text-blue-400 mx-auto" />
           <h2 className="text-xl font-bold text-white">LSTM Model Not Ready</h2>
@@ -170,7 +183,7 @@ export default function PredictionCryptoPage() {
           </button>
         </Card>
       ) : !hasRun ? (
-        /* 2. BEFORE PREDICTION PRE-RUN STATE */
+        /* 3. BEFORE PREDICTION PRE-RUN STATE / CONTROL */
         <PreRunState
           cryptoName={cryptoName}
           ticker={ticker}
@@ -181,36 +194,36 @@ export default function PredictionCryptoPage() {
       ) : prediction && prediction.current_price > 0 && prediction.predicted_price > 0 ? (
         /* MAIN PREDICTION RESULT HIERARCHY */
         <div className="space-y-10 animate-in fade-in duration-300">
-          {/* 4 & 5. MAIN FORECAST RESULT & EXPECTED MOVEMENT */}
+          {/* 4. MAIN FORECAST RESULT & EXPECTED MOVEMENT */}
           <MainForecastResult
             cryptoName={cryptoName}
             ticker={ticker}
             prediction={prediction}
           />
 
-          {/* 6 & 7. POSSIBLE FUTURE SCENARIOS & VISUAL RANGE */}
+          {/* 5. POSSIBLE FUTURE SCENARIOS & VISUAL RANGE */}
           <PredictionScenarios ticker={ticker} prediction={prediction} />
 
-          {/* 8. AI OUTLOOK */}
+          {/* 6. AI OUTLOOK */}
           <AIOutlookCard prediction={prediction} />
 
-          {/* 9 & 10. FORECAST CONFIDENCE & MARKET RISK */}
+          {/* 7. WHERE COULD IT GO? (FORECAST METRICS + FORECAST CHART) */}
+          <WhereCouldItGoSection ticker={ticker} prediction={prediction} />
+
+          {/* 8. FORECAST CONFIDENCE & MARKET RISK */}
           <ConfidenceAndRisk decisionData={decisionData} loading={pageLoading} />
 
-          {/* 11, 12 & 13. AI DECISION SUPPORT, SCORE & WHY THIS SIGNAL */}
+          {/* 9. AI DECISION SUPPORT, SCORE & WHY THIS SIGNAL */}
           <AIDecisionSupportSection
             ticker={ticker}
             decisionData={decisionData}
             loading={pageLoading}
           />
 
-          {/* 14. WHAT COULD CHANGE THIS FORECAST? */}
+          {/* 10. WHAT COULD CHANGE THIS FORECAST? */}
           <WhatCouldChangeSection />
 
-          {/* 15. PRICE FORECAST CHART */}
-          <ForecastChart ticker={ticker} />
-
-          {/* 16 & 23. DATA USED FOR THIS FORECAST & FRESHNESS */}
+          {/* 11. DATA USED FOR THIS FORECAST & FRESHNESS */}
           <DataUsedSection
             ticker={ticker}
             modelStatus={modelStatus}
@@ -218,13 +231,13 @@ export default function PredictionCryptoPage() {
             prediction={prediction}
           />
 
-          {/* 17. HOW WELL THE MODEL PERFORMS */}
+          {/* 12. HOW WELL THE MODEL PERFORMS */}
           <SimplifiedModelPerformance ticker={ticker} />
 
-          {/* 18. COLLAPSIBLE TECHNICAL DETAILS */}
+          {/* 13. COLLAPSIBLE TECHNICAL DETAILS */}
           <CollapsibleTechnicalDetails ticker={ticker} />
 
-          {/* 25. DISCLAIMER */}
+          {/* 14. DISCLAIMER */}
           <PredictionDisclaimer />
         </div>
       ) : (
