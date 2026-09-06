@@ -67,7 +67,7 @@ export function SimplifiedModelPerformance({ ticker }: SimplifiedModelPerformanc
       <div>
         <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center space-x-2">
           <Award className="w-5 h-5 text-emerald-400" />
-          <span>HOW WELL THE MODEL PERFORMS</span>
+          <span>How Well the Model Performs</span>
         </h2>
         <p className="text-xs text-slate-400 mt-1">
           Historical test set evaluation metrics computed on held-out test data for {ticker}
