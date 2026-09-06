@@ -1,0 +1,12 @@
+{
+  "cryptocurrency": "XRP",
+  "ticker": "XRP-USD",
+  "mae": 0.0462798435240984,
+  "mse": 0.003671314064336051,
+  "rmse": 0.0605913695532297,
+  "r2": 0.850559363114979,
+  "train_samples": 817,
+  "test_samples": 160,
+  "test_start_date": "2026-03-12",
+  "test_end_date": "2026-08-18"
+}

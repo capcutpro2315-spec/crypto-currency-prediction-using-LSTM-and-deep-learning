@@ -1,0 +1,12 @@
+{
+  "cryptocurrency": "Bitcoin",
+  "ticker": "BTC-USD",
+  "mae": 2233.067114257813,
+  "mse": 8629821.331045438,
+  "rmse": 2937.655754346557,
+  "r2": 0.7829509722503701,
+  "train_samples": 817,
+  "test_samples": 160,
+  "test_start_date": "2026-03-06",
+  "test_end_date": "2026-08-12"
+}

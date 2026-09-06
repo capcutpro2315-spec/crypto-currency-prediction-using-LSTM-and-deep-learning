@@ -1,0 +1,12 @@
+{
+  "cryptocurrency": "Ethereum",
+  "ticker": "ETH-USD",
+  "mae": 64.62916870117188,
+  "mse": 7335.963539991528,
+  "rmse": 85.65023957930023,
+  "r2": 0.868027077303945,
+  "train_samples": 817,
+  "test_samples": 160,
+  "test_start_date": "2026-03-12",
+  "test_end_date": "2026-08-18"
+}

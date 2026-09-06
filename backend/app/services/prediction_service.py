@@ -353,22 +353,59 @@ def get_evaluation_metrics(identifier: str = DEFAULT_CRYPTO) -> Dict[str, Any]:
     metadata_path = MODELS_SAVED_DIR / f"{ticker}_lstm_metadata.json"
     metrics_path = DATA_PROCESSED_DIR / f"{ticker}_metrics.json"
 
+    res: Optional[Dict[str, Any]] = None
     if metrics_path.exists():
-        with open(metrics_path, "r", encoding="utf-8") as f:
-            return json.load(f)
+        try:
+            with open(metrics_path, "r", encoding="utf-8") as f:
+                res = json.load(f)
+        except Exception:
+            res = None
 
-    if metadata_path.exists():
-        with open(metadata_path, "r", encoding="utf-8") as f:
-            meta = json.load(f)
-        return {
-            "cryptocurrency": meta.get("cryptocurrency", asset.name),
-            "ticker": ticker,
-            "metrics": meta.get("test_metrics_original_scale", {}),
-            "training_date_range": meta.get("training_date_range", {}),
-            "test_date_range": meta.get("test_date_range", {}),
-        }
+    if res is None and metadata_path.exists():
+        try:
+            with open(metadata_path, "r", encoding="utf-8") as f:
+                meta = json.load(f)
+            res = {
+                "cryptocurrency": meta.get("cryptocurrency", asset.name),
+                "ticker": ticker,
+                "metrics": meta.get("test_metrics_original_scale", {}),
+                "training_date_range": meta.get("training_date_range", {}),
+                "test_date_range": meta.get("test_date_range", {}),
+            }
+        except Exception:
+            res = None
 
-    raise FileNotFoundError(f"No evaluation metrics artifact found for '{ticker}'.")
+    # Fallback: trigger dynamic generation if metrics missing
+    if res is None:
+        try:
+            get_actual_vs_predicted_data(ticker)
+            if metrics_path.exists():
+                with open(metrics_path, "r", encoding="utf-8") as f:
+                    res = json.load(f)
+        except Exception:
+            pass
+
+    if res is None:
+        raise FileNotFoundError(f"No evaluation metrics artifact found for '{ticker}'.")
+
+    # Standardize output: ensure both flat top-level metrics (mae, mse, rmse, r2) AND nested 'metrics' dictionary key exist
+    metrics_dict = res.get("metrics") or {}
+    mae = res.get("mae") if res.get("mae") is not None else metrics_dict.get("mae")
+    mse = res.get("mse") if res.get("mse") is not None else metrics_dict.get("mse")
+    rmse = res.get("rmse") if res.get("rmse") is not None else metrics_dict.get("rmse")
+    r2 = res.get("r2") if res.get("r2") is not None else (res.get("r2_score") if res.get("r2_score") is not None else metrics_dict.get("r2"))
+
+    res["mae"] = mae
+    res["mse"] = mse
+    res["rmse"] = rmse
+    res["r2"] = r2
+    res["metrics"] = {
+        "mae": mae,
+        "mse": mse,
+        "rmse": rmse,
+        "r2": r2,
+    }
+    return res
 
 
 def get_actual_vs_predicted_data(identifier: str = DEFAULT_CRYPTO) -> pd.DataFrame:
@@ -383,6 +420,67 @@ def get_actual_vs_predicted_data(identifier: str = DEFAULT_CRYPTO) -> pd.DataFra
         return pd.read_csv(pred_csv_path)
     elif alt_csv_path.exists():
         return pd.read_csv(alt_csv_path)
+
+    # Dynamic fallback: generate actual vs predicted evaluation dataset using available trained model artifact
+    try:
+        data = preprocess_crypto(identifier=ticker)
+        lookback_days = data.lookback_days
+        model_path_adaptive = MODELS_SAVED_DIR / f"{ticker}_lstm_{lookback_days}d.keras"
+        model_path_legacy = MODELS_SAVED_DIR / f"{ticker}_lstm.keras"
+        model_path = model_path_adaptive if model_path_adaptive.exists() else model_path_legacy
+
+        if model_path.exists() and len(data.X_test) > 0:
+            model = load_cached_model(model_path)
+            test_preds_scaled = model.predict(data.X_test, verbose=0)
+
+            y_test_reshaped = data.y_test.reshape(-1, 1)
+            y_actual_orig = data.scaler.inverse_transform(y_test_reshaped).flatten()
+            y_pred_orig = data.scaler.inverse_transform(test_preds_scaled).flatten()
+
+            dates_str = [d.strftime("%Y-%m-%d") for d in data.test_dates]
+
+            history_df = pd.DataFrame({
+                "Date": dates_str,
+                "Actual Close": y_actual_orig,
+                "Predicted Close": y_pred_orig,
+            })
+
+            DATA_PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
+            history_df.to_csv(pred_csv_path, index=False)
+
+            # Compute and save metrics JSON if missing
+            metrics_path = DATA_PROCESSED_DIR / f"{ticker}_metrics.json"
+            if not metrics_path.exists():
+                mae_val = float(np.mean(np.abs(y_actual_orig - y_pred_orig)))
+                mse_val = float(np.mean((y_actual_orig - y_pred_orig) ** 2))
+                rmse_val = float(np.sqrt(mse_val))
+                ss_res = float(np.sum((y_actual_orig - y_pred_orig) ** 2))
+                ss_tot = float(np.sum((y_actual_orig - np.mean(y_actual_orig)) ** 2))
+                r2_val = float(1.0 - (ss_res / ss_tot)) if ss_tot > 0 else 0.0
+
+                metrics_data = {
+                    "cryptocurrency": asset.name,
+                    "ticker": ticker,
+                    "mae": mae_val,
+                    "mse": mse_val,
+                    "rmse": rmse_val,
+                    "r2": r2_val,
+                    "metrics": {
+                        "mae": mae_val,
+                        "mse": mse_val,
+                        "rmse": rmse_val,
+                        "r2": r2_val,
+                    },
+                    "test_samples": len(y_actual_orig),
+                    "test_start_date": dates_str[0] if dates_str else "",
+                    "test_end_date": dates_str[-1] if dates_str else "",
+                }
+                with open(metrics_path, "w", encoding="utf-8") as f:
+                    json.dump(metrics_data, f, indent=2)
+
+            return history_df
+    except Exception as e:
+        print(f"[DYNAMIC EVALUATION ERROR] Failed generating history for {ticker}: {e}")
 
     raise FileNotFoundError(f"No prediction history dataset found for '{ticker}'.")
 

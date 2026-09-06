@@ -1,0 +1,12 @@
+{
+  "cryptocurrency": "Solana",
+  "ticker": "SOL-USD",
+  "mae": 2.9488840579986566,
+  "mse": 16.237333282990033,
+  "rmse": 4.029557454980638,
+  "r2": 0.7081649875283307,
+  "train_samples": 817,
+  "test_samples": 160,
+  "test_start_date": "2026-03-12",
+  "test_end_date": "2026-08-18"
+}

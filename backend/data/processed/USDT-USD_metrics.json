@@ -1,0 +1,12 @@
+{
+  "cryptocurrency": "USDT",
+  "ticker": "USDT-USD",
+  "mae": 0.00024057589471341914,
+  "mse": 9.027295668763273e-08,
+  "rmse": 0.0003004545834026047,
+  "r2": 0.6534803365722299,
+  "train_samples": 817,
+  "test_samples": 160,
+  "test_start_date": "2026-03-12",
+  "test_end_date": "2026-08-18"
+}

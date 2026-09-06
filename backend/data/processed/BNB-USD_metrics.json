@@ -1,0 +1,14 @@
+{
+  "cryptocurrency": "BNB",
+  "ticker": "BNB-USD",
+  "mae": 63.9474910736084,
+  "mse": 4746.537099075434,
+  "rmse": 68.89511665622922,
+  "r2": -1.9164798175097255,
+  "train_samples": 817,
+  "test_samples": 160,
+  "available_history_days": 1097,
+  "lookback_days": 60,
+  "test_start_date": "2026-03-27",
+  "test_end_date": "2026-09-02"
+}

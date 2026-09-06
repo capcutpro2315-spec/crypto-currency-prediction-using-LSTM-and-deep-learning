@@ -1,0 +1,12 @@
+{
+  "cryptocurrency": "TRX",
+  "ticker": "TRX-USD",
+  "mae": 0.005412946268916128,
+  "mse": 4.930140417215285e-05,
+  "rmse": 0.007021495864283682,
+  "r2": 0.7818348908060997,
+  "train_samples": 817,
+  "test_samples": 160,
+  "test_start_date": "2026-03-12",
+  "test_end_date": "2026-08-18"
+}

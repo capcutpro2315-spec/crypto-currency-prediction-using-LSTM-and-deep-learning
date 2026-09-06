@@ -301,7 +301,20 @@ export async function getPrediction(ticker: string): Promise<CryptoPredictionRes
  * Fetch saved model evaluation metrics for a ticker.
  */
 export async function getMetrics(ticker: string): Promise<ModelEvaluationMetrics> {
-  return fetchAPI<ModelEvaluationMetrics>(`/api/predictions/${encodeURIComponent(ticker)}/metrics`);
+  const data = await fetchAPI<any>(`/api/predictions/${encodeURIComponent(ticker)}/metrics`);
+  const metricsObj = data.metrics || {};
+  return {
+    cryptocurrency: data.cryptocurrency || ticker,
+    ticker: data.ticker || ticker,
+    mae: data.mae ?? metricsObj.mae ?? 0,
+    mse: data.mse ?? metricsObj.mse ?? 0,
+    rmse: data.rmse ?? metricsObj.rmse ?? 0,
+    r2: data.r2 ?? data.r2_score ?? metricsObj.r2 ?? 0,
+    train_samples: data.train_samples ?? data.training_date_range?.samples,
+    test_samples: data.test_samples ?? data.test_date_range?.samples,
+    test_start_date: data.test_start_date ?? data.test_date_range?.start_date,
+    test_end_date: data.test_end_date ?? data.test_date_range?.end_date,
+  };
 }
 
 /**

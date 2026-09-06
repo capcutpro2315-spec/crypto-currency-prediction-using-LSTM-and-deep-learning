@@ -1,0 +1,14 @@
+{
+  "cryptocurrency": "Dogecoin",
+  "ticker": "DOGE-USD",
+  "mae": 0.0032714231871068685,
+  "mse": 1.918628314892899e-05,
+  "rmse": 0.004380214966063765,
+  "r2": 0.8894120294774703,
+  "train_samples": 817,
+  "test_samples": 160,
+  "available_history_days": 1097,
+  "lookback_days": 60,
+  "test_start_date": "2026-03-06",
+  "test_end_date": "2026-08-12"
+}

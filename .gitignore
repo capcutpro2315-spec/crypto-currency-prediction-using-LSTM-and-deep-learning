@@ -29,6 +29,9 @@ backend/data/raw/*
 !backend/data/raw/.gitkeep
 backend/data/processed/*
 !backend/data/processed/.gitkeep
+!backend/data/processed/*_predictions.csv
+!backend/data/processed/*_actual_vs_predicted.csv
+!backend/data/processed/*_metrics.json
 
 # Node / Next.js
 node_modules/
